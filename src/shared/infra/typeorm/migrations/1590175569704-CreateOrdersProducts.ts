@@ -1,11 +1,6 @@
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-  TableForeignKey,
-} from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export default class AddOrdersProductsTable1608147415763
+export default class CreateOrdersProducts1590175569704
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
@@ -15,27 +10,28 @@ export default class AddOrdersProductsTable1608147415763
           {
             name: 'id',
             type: 'uuid',
-            isPrimary: true,
             generationStrategy: 'uuid',
+            isPrimary: true,
             default: 'uuid_generate_v4()',
-          },
-          {
-            name: 'order_id',
-            type: 'uuid',
-            isNullable: true,
           },
           {
             name: 'product_id',
             type: 'uuid',
-            isNullable: true,
+          },
+          {
+            name: 'order_id',
+            type: 'uuid',
           },
           {
             name: 'price',
-            type: 'double precision',
+            type: 'decimal',
+            precision: 5,
+            scale: 2,
           },
           {
             name: 'quantity',
             type: 'integer',
+            default: 1,
           },
           {
             name: 'created_at',
@@ -48,29 +44,24 @@ export default class AddOrdersProductsTable1608147415763
             default: 'now()',
           },
         ],
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      'orders_products',
-      new TableForeignKey({
-        name: 'FK_orders_order',
-        columnNames: ['order_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'orders',
-        onDelete: 'SET NULL',
-        onUpdate: 'CASCADE',
-      }),
-    );
-    await queryRunner.createForeignKey(
-      'orders_products',
-      new TableForeignKey({
-        name: 'FK_orders_product',
-        columnNames: ['product_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'products',
-        onDelete: 'SET NULL',
-        onUpdate: 'CASCADE',
+        foreignKeys: [
+          {
+            name: 'orderId',
+            referencedTableName: 'orders',
+            referencedColumnNames: ['id'],
+            columnNames: ['order_id'],
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+          },
+          {
+            name: 'productId',
+            referencedTableName: 'products',
+            referencedColumnNames: ['id'],
+            columnNames: ['product_id'],
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE',
+          },
+        ],
       }),
     );
   }

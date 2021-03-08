@@ -1,5 +1,3 @@
-import 'reflect-metadata';
-
 import request from 'supertest';
 
 import { Connection, getConnection, getRepository } from 'typeorm';
@@ -89,7 +87,7 @@ describe('App', () => {
     );
   });
 
-  it('should not be able to create a duplicated product', async () => {
+  it('should not be able to create a customer with one e-mail thats already registered', async () => {
     const product = await request(app).post('/products').send({
       name: 'Produto 01',
       price: 500,
@@ -147,7 +145,7 @@ describe('App', () => {
         order_products: expect.arrayContaining([
           expect.objectContaining({
             product_id: product.body.id,
-            price: 500.0,
+            price: '500.00',
             quantity: 5,
           }),
         ]),
@@ -301,7 +299,7 @@ describe('App', () => {
         order_products: expect.arrayContaining([
           expect.objectContaining({
             product_id: product.body.id,
-            price: 500.0,
+            price: '500.00',
             quantity: 5,
           }),
         ]),

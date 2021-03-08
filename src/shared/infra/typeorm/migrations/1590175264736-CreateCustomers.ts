@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export default class AddCustomersTable1608143210031
+export default class CreateCustomers1590175264736
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
@@ -20,8 +20,8 @@ export default class AddCustomersTable1608143210031
           },
           {
             name: 'email',
-            type: 'varchar',
             isUnique: true,
+            type: 'varchar',
           },
           {
             name: 'created_at',
